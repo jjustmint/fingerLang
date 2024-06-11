@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/auth/prelogin/prelogin.dart';
 import 'package:frontend/pages/onboarding/onboarding.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const OnboardingPage(),
+      home: const Prelogin(),
     );
   }
 }
