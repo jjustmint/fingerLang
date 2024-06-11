@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/lesson/lesson.dart';
 import 'package:frontend/pages/onboarding/onboarding.dart';
 import 'package:frontend/pages/profile/profile.dart';
+import 'package:frontend/pages/home/home.dart';
+
 
 void main() {
   runApp(const MainApp());
