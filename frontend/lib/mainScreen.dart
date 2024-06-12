@@ -1,30 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/auth/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/pages/lesson/lesson.dart';
-import 'package:frontend/pages/onboarding/onboarding.dart';
 import 'package:frontend/pages/profile/profile.dart';
 import 'package:frontend/pages/home/home.dart';
-
-void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MainScreen(),
-    );
-  }
-}
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -34,38 +13,29 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool _showOnboarding = true;
+  bool _isLogin = false;
 
   @override
   void initState() {
     super.initState();
     _checkOnboardingStatus();
-    _showOnboarding;
   }
 
   Future<void> _checkOnboardingStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool onboardingComplete = prefs.getBool('onboardingComplete') ?? true;
+    bool staylogin = prefs.getBool('login') ?? false;
 
-    if (onboardingComplete) {
+    if (staylogin) {
       setState(() {
-        _showOnboarding = false;
+        _isLogin = true;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_showOnboarding) {
-      return OnboardingPage(
-        onFinish: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('onboardingComplete', true);
-          setState(() {
-            _showOnboarding = false;
-          });
-        },
-      );
+    if (!_isLogin) {
+      return Login();
     } else {
       return const MainAppContent();
     }
