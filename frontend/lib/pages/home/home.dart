@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/home/Textbox.dart';
+import 'package:frontend/pages/home/TopBar.dart';
+import 'package:frontend/pages/home/categoryCard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,32 +38,15 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container( //category card
-                      height: 97,
-                      width: 358,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFF5D5),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 0,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Text('Alphabet',
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color(0xFFA86944))),
-                        
-                        ],
-                      ),
+                    categoryCard(),
+                    SizedBox(
+                      height: 20,
                     ),
+                    categoryCard(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    categoryCard(),
                   ],
                 ),
               ),
@@ -69,43 +54,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ), // Set background color
-    );
-  }
-}
-
-class TopBar extends StatelessWidget {
-  const TopBar({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 273,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-          bottomRight: Radius.circular(100),
-        ),
-        color: Color(0xFFCC8459),
-      ),
-      child: const Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 102),
-            child: Center(
-              child: Text(
-                'Home',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFFFFFCD2),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
