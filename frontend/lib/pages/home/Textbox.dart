@@ -57,7 +57,7 @@ class HomeTextBox extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 183.0, left: 228),
             child: Image.asset(
-              'assets/images/test.png',
+              'assets/images/Hello.png',
               width: 133,
               height: 133,
             ),
