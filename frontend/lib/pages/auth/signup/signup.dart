@@ -252,44 +252,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                   ),
                                 ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: _agreeTerms,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        _agreeTerms = value ?? false;
-                                      });
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    child: Text('I agree with the Terms and Conditions'),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: _agreePrivacy,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        _agreePrivacy = value ?? false;
-                                      });
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    child: Text('I agree with the Privacy Policy'),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 40),
                               Center(
                                 child: ElevatedButton(
                                   onPressed: () {
