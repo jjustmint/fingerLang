@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+
+class AlphabetCard extends StatelessWidget {
+  const AlphabetCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 89,
+        width: 89,
+        child: Center(
+          child: Text("A"),
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF5D5),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 0,
+              blurRadius: 4,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ));
+  }
+}
