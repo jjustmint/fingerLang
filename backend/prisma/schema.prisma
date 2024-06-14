@@ -1,14 +1,105 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Categories {
+  id              Int          @id @default(autoincrement())
+  categories_name String       @db.VarChar(50)
+  image_url       String       @db.Text
+  Hand_posts      Hand_posts[]
+}
+
+model Favorite {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  Hand_posts Hand_posts @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "Favorite_Sign_id_fk")
+  User       Users      @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "Favorite_User_id_fk")
+
+  @@index([post_id], map: "Favorite_Sign_id_fk")
+  @@index([user_id], map: "Favorite_User_id_fk")
+}
+
+model Hand_posts {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(50)
+  desc         String         @db.Text
+  image_url    String         @db.Text
+  post_url     String         @db.Text
+  category_id  Int
+  Favorite     Favorite[]
+  Categories   Categories     @relation(fields: [category_id], references: [id], onUpdate: Restrict, map: "Hand_posts_Categories_id_fk")
+  Lesson_lists Lesson_lists[]
+  Quiz         Quiz[]
+
+  @@index([category_id], map: "Hand_posts_Categories_id_fk")
+}
+
+model Lesson_lists {
+  id         Int        @id @default(autoincrement())
+  lesson_id  Int
+  post_id    Int
+  is_done    Boolean    @default(false)
+  Hand_posts Hand_posts @relation(fields: [post_id], references: [id], onUpdate: Restrict, map: "Lesson_lists_Hand_posts_id_fk")
+  Lessons    Lessons    @relation(fields: [lesson_id], references: [id], onUpdate: Restrict, map: "Lesson_lists_Lessons_id_fk")
+
+  @@index([post_id], map: "Lesson_lists_Hand_posts_id_fk")
+  @@index([lesson_id], map: "Lesson_lists_Lessons_id_fk")
+}
+
+model Lessons {
+  id           Int            @id @default(autoincrement())
+  lessons_name String         @db.VarChar(50)
+  lesson_url   String         @db.Text
+  Lesson_lists Lesson_lists[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Lessson_percent {
+  lesson_name String?  @db.VarChar(50)
+  user_id     Int
+  percent     Decimal? @db.Decimal(5, 2)
+
+  @@ignore
+}
+
+model Quiz {
+  id         Int        @id @default(autoincrement())
+  question   String     @db.VarChar(255)
+  answer_id  Int
+  Hand_posts Hand_posts @relation(fields: [answer_id], references: [id], onUpdate: Restrict, map: "Quiz_Hand_posts_id_fk")
+
+  @@index([answer_id], map: "Quiz_Hand_posts_id_fk")
+}
+
+model Trophies {
+  id            Int             @id @default(autoincrement())
+  trophy_name   String          @db.VarChar(50)
+  trophy_url    String          @db.Text
+  User_trophies User_trophies[]
+}
+
+model User_trophies {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  trophy_id Int
+  Trophies  Trophies @relation(fields: [trophy_id], references: [id], onUpdate: Restrict, map: "User_trophies_Trophies_id_fk")
+  User      Users    @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "User_trophies_User_id_fk")
+
+  @@index([trophy_id], map: "User_trophies_Trophies_id_fk")
+  @@index([user_id], map: "User_trophies_User_id_fk")
+}
+
+model Users {
+  id            Int             @id @default(autoincrement())
+  username      String          @unique(map: "User_pk_2") @db.VarChar(255)
+  password      String          @db.Text
+  image_url     String?         @db.Text
+  Favorite      Favorite[]
+  User_trophies User_trophies[]
 }
