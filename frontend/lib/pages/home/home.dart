@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/pages/home/HomeAppBar.dart';
-import 'package:frontend/pages/home/Textbox.dart';
-import 'package:frontend/pages/home/TopBar.dart';
 import 'package:frontend/pages/home/categoryCard.dart';
 
 class HomePage extends StatefulWidget {
@@ -54,7 +50,7 @@ class CategorySection extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.only(bottom: 20.0),
                 child: categoryCard(
-                  CategoryName: "test",
+                  CategoryName: "Alphabet",
                 ),
               );
             },
