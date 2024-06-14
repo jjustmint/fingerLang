@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _checkOnboardingStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool staylogin = prefs.getBool('login') ?? false;
+    bool staylogin = prefs.getBool('login') ?? true;
 
     if (staylogin) {
       setState(() {

@@ -51,9 +51,11 @@ class CategorySection extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return const Padding(
+              return Padding(
                 padding: EdgeInsets.only(bottom: 20.0),
-                child: categoryCard(),
+                child: categoryCard(
+                  CategoryName: "test",
+                ),
               );
             },
           ),
