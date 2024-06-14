@@ -1,0 +1,5 @@
+- category
+  - get all category - GET `/category/getcategory`
+- handpose
+  - get handpose by category id - GET `/handpose/getbycategory/:categoryId`
+  - get handpose data by handpose id - GET `handpose/getbyid/:handposeId`
