@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AlphabetCard extends StatelessWidget {
-  const AlphabetCard({super.key});
+  final String alphabet;
+  const AlphabetCard({super.key, required this.alphabet});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 89,
         width: 89,
-        child: Center(
-          child: Text("A"),
-        ),
         decoration: BoxDecoration(
           color: const Color(0xFFFFF5D5),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               spreadRadius: 0,
@@ -22,6 +20,7 @@ class AlphabetCard extends StatelessWidget {
               offset: Offset(0, 4),
             ),
           ],
-        ));
+        ),
+        child: Image.network(alphabet));
   }
 }

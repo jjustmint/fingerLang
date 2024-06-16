@@ -3,9 +3,13 @@ import 'package:frontend/pages/home/InfoCategory.dart';
 
 class categoryCard extends StatelessWidget {
   String CategoryName;
+  String CategoryImage;
+  int id;
   categoryCard({
     super.key,
     required this.CategoryName,
+    required this.CategoryImage,
+    required this.id,
   });
 
   @override
@@ -17,6 +21,7 @@ class categoryCard extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => InfoCategory(
                     categoryName: CategoryName,
+                    id: id,
                   )),
         );
       },
@@ -49,8 +54,8 @@ class categoryCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(
                   top: 9, left: 256, right: 20, bottom: 8),
-              child: Image.asset(
-                'assets/images/abc.png',
+              child: Image.network(
+                CategoryImage,
                 width: 80,
                 height: 80,
               ),

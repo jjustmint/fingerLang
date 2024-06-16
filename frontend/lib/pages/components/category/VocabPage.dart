@@ -43,7 +43,7 @@ class _VocabState extends State<Vocab> {
             Padding(
               padding: const EdgeInsets.all(37.0),
               child: Image(
-                image: AssetImage(widget.gif),
+                image: NetworkImage(widget.gif),
                 width: 340,
                 height: 200,
               ),
@@ -73,7 +73,7 @@ class _VocabState extends State<Vocab> {
                         padding: const EdgeInsets.only(top: 18.0, left: 30.0),
                         child: Text(
                           widget.vocabName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFFA86944),
@@ -97,8 +97,8 @@ class _VocabState extends State<Vocab> {
                     padding: const EdgeInsets.only(left: 30),
                     child: Text(
                       widget.description,
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: const TextStyle(
+                        fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFFA86944),
                       ),
