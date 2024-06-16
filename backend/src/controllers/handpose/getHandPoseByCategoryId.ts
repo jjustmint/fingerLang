@@ -12,6 +12,9 @@ const getHandposeByCategoryId = async (req: Request, res: Response) => {
     select: {
       id: true,
       image_url: true,
+      name: true,
+      post_url: true,
+      desc: true,
     },
   });
 
