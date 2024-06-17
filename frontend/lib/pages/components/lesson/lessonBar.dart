@@ -5,9 +5,13 @@ import 'package:frontend/pages/home/TopBar.dart';
 
 class lessonBar extends StatelessWidget {
   final bool recentLesson;
+  final String? lessonName;
+  final String? lessonLevel;
   const lessonBar({
     super.key,
     required this.recentLesson,
+    this.lessonName,
+    this.lessonLevel,
   });
 
   @override
@@ -25,7 +29,15 @@ class lessonBar extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Image.asset('assets/images/book.png'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 40.0,
+                ),
+                child: Center(
+                  child: Image.asset('assets/images/book.png',
+                      height: 240, width: 322),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 18.0),
                 child: Center(
@@ -52,7 +64,6 @@ class lessonBar extends StatelessWidget {
         Transform.translate(
           offset: const Offset(66, -160),
           child: Container(
-            // padding: EdgeInsets.only(bottom: 102),
             height: 262,
             width: 262,
             decoration: BoxDecoration(
@@ -95,7 +106,7 @@ class lessonBar extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Lesson Name',
+                              lessonName!,
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w900,
@@ -103,11 +114,11 @@ class lessonBar extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(right: 50.0, top: 10.0),
+                              padding: EdgeInsets.only(right: 50.0, top: 4.0),
                               child: Text(
-                                'Beginner Level',
+                                lessonLevel!,
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Color(0xFFA86944),
                                 ),
@@ -138,16 +149,16 @@ class lessonBar extends StatelessWidget {
                     onPressed: () {},
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(const Color(0xFF5491E)),
-                      textStyle: MaterialStateProperty.all(
-                        TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFFFFFCD2),
-                        ),
+                          MaterialStateProperty.all(const Color(0xFFA86944)),
+                    ),
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFFFFFCD2), // Set the text color here
                       ),
                     ),
-                    child: Text('Continue'),
                   ),
                 )
             ],

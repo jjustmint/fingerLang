@@ -4,11 +4,13 @@ import 'package:frontend/pages/home/InfoCategory.dart';
 class LessonCard extends StatelessWidget {
   String LessonName;
   String LessonImage;
+  String Level;
   int id;
   LessonCard({
     super.key,
     required this.LessonName,
     required this.LessonImage,
+    required this.Level,
     required this.id,
   });
 
@@ -41,16 +43,24 @@ class LessonCard extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 21, bottom: 30),
+              padding: const EdgeInsets.only(top: 14, left: 21, bottom: 30),
               child: Text(LessonName,
                   style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFFA86944))),
             ),
             Padding(
+              padding: const EdgeInsets.only(top: 46, left: 21, bottom: 30),
+              child: Text(Level,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFFA86944))),
+            ),
+            Padding(
               padding: const EdgeInsets.only(
-                  top: 9, left: 256, right: 20, bottom: 8),
+                  top: 9, left: 270, right: 20, bottom: 8),
               child: Image.network(
                 LessonImage,
                 width: 80,
