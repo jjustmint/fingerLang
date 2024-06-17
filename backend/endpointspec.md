@@ -3,3 +3,6 @@
 - handpose
   - get handpose by category id - GET `/handpose/getbycategory/:categoryId`
   - get handpose data by handpose id - GET `handpose/getbyid/:handposeId`
+- auth
+  - Login - POST `/auth/login`
+  - Register - POST `/auth/register`
