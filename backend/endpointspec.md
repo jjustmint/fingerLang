@@ -6,3 +6,7 @@
 - auth
   - Login - POST `/auth/login`
   - Register - POST `/auth/register`
+- profile
+  - get profile - GET `/profile/getprofile/`
+- lesson
+  - get lesson - GET `/lesson/getlesson`
