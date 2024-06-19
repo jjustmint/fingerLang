@@ -118,7 +118,7 @@ class NormalList extends StatelessWidget {
     return Column(
       children: [
         ListView.builder(
-          itemCount: 6, // Adjust the number of categories as needed
+          itemCount: vocabs.length, // Adjust the number of categories as needed
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
@@ -156,7 +156,8 @@ class AlphabetList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      padding: const EdgeInsets.only(left: 40.0, right: 40, bottom: 20, top: 40),
+      padding:
+          const EdgeInsets.only(left: 40.0, right: 40, bottom: 20, top: 40),
       crossAxisCount: 3, // Number of columns
       mainAxisSpacing: 10.0,
       crossAxisSpacing: 10.0,
@@ -182,7 +183,9 @@ class AlphabetList extends StatelessWidget {
                   ),
                 );
               },
-              child: AlphabetCard(alphabet: vocabs[index].image,), // Ensure AlphabetCard gets the correct parameter
+              child: AlphabetCard(
+                alphabet: vocabs[index].image,
+              ), // Ensure AlphabetCard gets the correct parameter
             ),
           );
         },
@@ -190,4 +193,3 @@ class AlphabetList extends StatelessWidget {
     );
   }
 }
-
