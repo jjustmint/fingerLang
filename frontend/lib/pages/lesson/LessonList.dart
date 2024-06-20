@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/pages/components/MyAppBar.dart';
+import 'package:frontend/pages/components/category/VocabPage.dart';
 import 'package:frontend/pages/components/lesson/notClickable.dart';
 
 class LessonList extends StatelessWidget {
@@ -64,6 +65,7 @@ class LessonList extends StatelessWidget {
                             ),
                             lessonVocabCard(
                               Vocabulary: "test",
+                              lessonName: LessonName,
                             ),
                           ],
                         );
@@ -77,46 +79,62 @@ class LessonList extends StatelessWidget {
 }
 
 class lessonVocabCard extends StatelessWidget {
+  String lessonName;
   String Vocabulary;
   lessonVocabCard({
     super.key,
     required this.Vocabulary,
+    required this.lessonName,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 66.0, top: 33),
-      child: Container(
-        width: 300,
-        height: 57,
-        decoration: BoxDecoration(
-          color: Color(0xFFFFF5D5),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 12),
-              child: Text(
-                Vocabulary,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFFA86944),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Vocab(
+                      vocabName: Vocabulary,
+                      gif:
+                          "https://images.pexels.com/photos/3680219/pexels-photo-3680219.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                      categoryName: lessonName,
+                      description: "test",
+                    )));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 66.0, top: 33),
+        child: Container(
+          width: 300,
+          height: 57,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFF5D5),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 4,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 12),
+                child: Text(
+                  Vocabulary,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFFA86944),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

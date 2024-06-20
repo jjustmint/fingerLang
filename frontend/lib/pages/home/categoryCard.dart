@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home/InfoCategory.dart';
+import 'package:frontend/pages/home/VocabList.dart';
 
 class categoryCard extends StatelessWidget {
   String CategoryName;

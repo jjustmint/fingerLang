@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home/InfoCategory.dart';
+import 'package:frontend/pages/home/VocabList.dart';
 import 'package:frontend/pages/lesson/LessonList.dart';
 
 class notClick extends StatelessWidget {
