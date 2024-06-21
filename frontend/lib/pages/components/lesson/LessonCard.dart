@@ -6,12 +6,14 @@ class LessonCard extends StatelessWidget {
   String LessonImage;
   String Level;
   int id;
+  VoidCallback onBackButtonPressed;
   LessonCard({
     super.key,
     required this.LessonName,
     required this.LessonImage,
     required this.Level,
     required this.id,
+    required this.onBackButtonPressed,
   });
 
   @override
@@ -25,7 +27,9 @@ class LessonCard extends StatelessWidget {
                   LessonName: LessonName,
                   LessonImage: LessonImage,
                   Level: Level,
-                  id: id)),
+                  id: id,
+                  onBackButtonPressed: onBackButtonPressed
+                  )),
         );
       },
       child: Container(

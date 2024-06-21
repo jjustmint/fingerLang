@@ -1,20 +1,45 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/pages/components/MyAppBar.dart';
 import 'package:frontend/pages/components/category/VocabPage.dart';
 import 'package:frontend/pages/components/lesson/notClickable.dart';
+import 'package:frontend/pages/lesson/lesson.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LessonList extends StatelessWidget {
+class LessonList extends StatefulWidget {
   final String LessonName;
   final String LessonImage;
   final String Level;
   final int id;
+  final VoidCallback onBackButtonPressed;
   LessonList(
       {super.key,
       required this.LessonName,
       required this.LessonImage,
       required this.Level,
-      required this.id});
+      required this.id,
+      required this.onBackButtonPressed
+      });
+
+  @override
+  State<LessonList> createState() => _LessonListState();
+}
+
+class _LessonListState extends State<LessonList> {
+  void initState() {
+    recentlyLesson();
+    super.initState();
+  }
+
+  void recentlyLesson() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('lastestLesson', widget.LessonName);
+    prefs.setString('lessonLevel', widget.Level);
+    prefs.setString('lessonImage', widget.LessonImage);
+    prefs.setInt('lessonId', widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +48,18 @@ class LessonList extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              MyAppBar(Topic: LessonName),
+              MyAppBar(
+                Topic: widget.LessonName,
+                onBackButtonPressed: widget.onBackButtonPressed,
+              ),
               SizedBox(
                 height: 40,
               ),
               notClick(
-                  LessonName: LessonName,
-                  LessonImage: LessonImage,
-                  Level: Level,
-                  id: id),
+                  LessonName: widget.LessonName,
+                  LessonImage: widget.LessonImage,
+                  Level: widget.Level,
+                  id: widget.id),
               Stack(
                 children: [
                   Padding(
@@ -65,7 +93,7 @@ class LessonList extends StatelessWidget {
                             ),
                             lessonVocabCard(
                               Vocabulary: "test",
-                              lessonName: LessonName,
+                              lessonName: widget.LessonName,
                             ),
                           ],
                         );
