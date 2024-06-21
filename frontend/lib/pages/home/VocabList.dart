@@ -90,6 +90,9 @@ class _InfoCategoryState extends State<InfoCategory> {
           children: [
             MyAppBar(
               Topic: widget.categoryName,
+              onBackButtonPressed: () {
+                Navigator.pop(context);
+              },
             ),
             if (widget.categoryName == "Alphabets")
               AlphabetList(

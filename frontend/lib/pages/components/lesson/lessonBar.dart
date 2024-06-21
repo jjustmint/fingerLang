@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/pages/home/Textbox.dart';
 import 'package:frontend/pages/home/TopBar.dart';
+import 'package:frontend/pages/lesson/LessonList.dart';
 
 class lessonBar extends StatelessWidget {
   final bool recentLesson;
   final String? lessonName;
   final String? lessonLevel;
+  final String? lessonImage;
+  final int? id;
+  final VoidCallback onBackButtonPressed;
   const lessonBar({
     super.key,
     required this.recentLesson,
     this.lessonName,
     this.lessonLevel,
+    this.lessonImage,
+    this.id,
+    required this.onBackButtonPressed,
   });
 
   @override
@@ -146,7 +153,20 @@ class lessonBar extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 218.0, top: 250.0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LessonList(
+                            LessonName: lessonName!,
+                            LessonImage: lessonImage!,
+                            Level: lessonLevel!,
+                            id: id!,
+                            onBackButtonPressed: onBackButtonPressed,
+                          ),
+                        ),
+                      );
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(const Color(0xFFA86944)),
