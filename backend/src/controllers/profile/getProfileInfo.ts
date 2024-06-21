@@ -22,6 +22,7 @@ const getProfileInfo = async (req: Request, res: Response) => {
           },
         },
       },
+      Favorite: true,
     },
   });
   const response = {
