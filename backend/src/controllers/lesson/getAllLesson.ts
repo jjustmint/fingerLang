@@ -4,13 +4,13 @@ import { prisma } from "../..";
 
 const getAllLesson = async (req: Request, res: Response) => {
   const data = await prisma.lessons.findMany({
-    include: {
-      Lesson_lists: {
-        include: {
-          Hand_posts: true,
-        },
-      },
-    },
+    // include: {
+    //   Lesson_lists: {
+    //     include: {
+    //       Hand_posts: true,
+    //     },
+    //   },
+    // },
   });
   return res.json(data);
 };

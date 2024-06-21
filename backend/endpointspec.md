@@ -9,4 +9,5 @@
 - profile
   - get profile - GET `/profile/getprofile/`
 - lesson
-  - get lesson - GET `/lesson/getlesson`
+  - get all lesson - GET `/lesson/getlesson`
+  - get lesson list - GET `/lesson/getlessonlist/:lessonId`
