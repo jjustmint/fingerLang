@@ -7,6 +7,9 @@ const getLessonList = async (req: Request, res: Response) => {
     where:{
         lesson_id: id,
     },
+    select: {
+      Hand_posts: true,
+    },
   });
   return res.json(data);
 };
