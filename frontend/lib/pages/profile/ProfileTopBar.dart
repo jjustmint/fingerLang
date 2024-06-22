@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/auth/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTopBar extends StatelessWidget {
   const ProfileTopBar({Key? key}) : super(key: key);
@@ -18,9 +20,10 @@ class ProfileTopBar extends StatelessWidget {
               child: Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                // Navigate to the login page and remove the back stack
-                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString("token", "");
+                Navigator.push(context,MaterialPageRoute(builder: (context) => Login()));
               },
               child: Text('Confirm'),
             ),
