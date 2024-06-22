@@ -1,7 +1,10 @@
+import "dart:convert";
+
 import "package:flutter/material.dart";
 import "package:frontend/pages/components/lesson/LessonCard.dart";
 import "package:frontend/pages/components/lesson/lessonBar.dart";
 import "package:shared_preferences/shared_preferences.dart";
+import 'package:http/http.dart' as http;
 
 class LessonPage extends StatefulWidget {
   const LessonPage({super.key});
@@ -10,15 +13,41 @@ class LessonPage extends StatefulWidget {
   State<LessonPage> createState() => _LessonPageState();
 }
 
+class Lessons {
+  final String lessonName;
+  final String lessonLevel;
+  final String lessonImage;
+  final int id;
+
+  Lessons({
+    required this.lessonName,
+    required this.lessonLevel,
+    required this.lessonImage,
+    required this.id,
+  });
+
+  factory Lessons.fromJson(Map<String, dynamic> json) {
+    return Lessons(
+      lessonName: json['lessons_name'],
+      lessonLevel: json['level'],
+      lessonImage: json['lesson_url'],
+      id: json['id'],
+    );
+  }
+}
+
 class _LessonPageState extends State<LessonPage> {
   String lastestLesson = "";
   String lessonLevel = "";
   String lessonImage = "";
   int lessonId = 0;
   bool _isRecentLesson = false;
+  List<Lessons> lessons = [];
+
   @override
   void initState() {
     CheckRecentLesson();
+    getLesson();
     super.initState();
   }
 
@@ -37,6 +66,37 @@ class _LessonPageState extends State<LessonPage> {
         _isRecentLesson = true;
       }
     });
+  }
+
+  void getLesson() async {
+    try {
+      final apiURL = 'http://10.0.2.2:8000/lesson/getlesson';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        print('getLesson');
+        setState(() {
+          lessons = parseLesson(response.body);
+        });
+        print('Categories: $lessons');
+      } else {
+        print('Failed to load lesson data');
+      }
+    } catch (e) {
+      print('ERROR: $e');
+    }
+  }
+
+  List<Lessons> parseLesson(String body) {
+    try {
+      List<dynamic> jsonData = jsonDecode(body);
+      return jsonData.map((json) => Lessons.fromJson(json)).toList();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   @override
@@ -69,7 +129,7 @@ class _LessonPageState extends State<LessonPage> {
               ),
               Center(
                 child: ListView.builder(
-                    itemCount: 5,
+                    itemCount: lessons.length,
                     padding:
                         const EdgeInsets.only(top: 24, left: 20, right: 20),
                     shrinkWrap: true,
@@ -78,11 +138,10 @@ class _LessonPageState extends State<LessonPage> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: LessonCard(
-                          Level: "Beginner",
-                          LessonName: "test",
-                          LessonImage:
-                              "https://images.pexels.com/photos/3680219/pexels-photo-3680219.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                          id: 1,
+                          Level: lessons[index].lessonLevel,
+                          LessonName: lessons[index].lessonName,
+                          LessonImage: lessons[index].lessonImage,
+                          id: lessons[index].id,
                           onBackButtonPressed: () {
                             CheckRecentLesson();
                             Navigator.pop(context);
