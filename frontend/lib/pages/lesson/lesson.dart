@@ -53,10 +53,6 @@ class _LessonPageState extends State<LessonPage> {
 
   Future<void> CheckRecentLesson() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('lastestLesson', "");
-    // prefs.setString('lessonLevel', "");
-    // prefs.setString('lessonImage', "");
-    // prefs.setInt('lessonId', 0);
     setState(() {
       lastestLesson = prefs.getString('lastestLesson') ?? "";
       lessonLevel = prefs.getString('lessonLevel') ?? "";
