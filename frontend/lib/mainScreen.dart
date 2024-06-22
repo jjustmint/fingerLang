@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/auth/login/login.dart';
+import 'package:frontend/pages/auth/prelogin/prelogin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/pages/lesson/lesson.dart';
 import 'package:frontend/pages/profile/profile.dart';
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_isLogin) {
-      return Login();
+      return Prelogin();
     } else {
       return const MainAppContent();
     }
@@ -93,27 +94,3 @@ class _MainAppContentState extends State<MainAppContent> {
     );
   }
 }
-
-// class OnboardingPage extends StatelessWidget {
-//   final VoidCallback onFinish;
-
-//   const OnboardingPage({required this.onFinish, Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             Text('Welcome to the Onboarding Page'),
-//             ElevatedButton(
-//               onPressed: onFinish,
-//               child: Text('Finish Onboarding'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
