@@ -4,6 +4,7 @@ import 'package:frontend/pages/auth/login/login.dart';
 import 'package:frontend/pages/auth/signup/signup.dart';
 import 'package:frontend/pages/lesson/lesson.dart';
 import 'package:frontend/pages/onboarding/onboarding.dart';
+import 'package:frontend/pages/profile/FavoritePage.dart';
 import 'package:frontend/pages/profile/profile.dart';
 import 'package:frontend/pages/home/home.dart';
 

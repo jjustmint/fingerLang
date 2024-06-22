@@ -119,7 +119,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFFCD2),
                             borderRadius: const BorderRadius.only(
@@ -252,7 +252,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                   ),
                                 ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 100),
                               Center(
                                 child: ElevatedButton(
                                   onPressed: () {
