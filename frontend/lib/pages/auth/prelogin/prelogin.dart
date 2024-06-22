@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/auth/login/login.dart';
+import 'package:frontend/pages/auth/signup/signup.dart';
 
 class Prelogin extends StatefulWidget {
   const Prelogin({Key? key}) : super(key: key);
@@ -126,7 +128,10 @@ class _PreloginState extends State<Prelogin> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              // Handle sign-in action
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Login()),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black87,
@@ -166,7 +171,10 @@ class _PreloginState extends State<Prelogin> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              // Handle sign-up action
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignUpPage()),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,

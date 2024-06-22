@@ -5,6 +5,7 @@ class ProfileAvatar extends StatefulWidget {
   _ProfileAvatarState createState() => _ProfileAvatarState();
 }
 
+
 class _ProfileAvatarState extends State<ProfileAvatar> {
   // List of predefined images
   final List<String> _images = [
@@ -115,6 +116,8 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                   _selectedIndex = _tempSelectedIndex;
                 });
                 Navigator.of(context).pop();
+                String selectedImageUrl = _images[_selectedIndex];
+                //_updateUserProfile(selectedImageUrl);
               },
               child: Text('Confirm'),
             ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:frontend/pages/auth/login/login.dart'; // Import your login page widget here
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -8,14 +11,16 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _agreeTerms = false;
-  bool _agreePrivacy = false;
+  //bool _agreeTerms = false;
+  //bool _agreePrivacy = false;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isPasswordMatching = true;
 
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   void _checkPasswordMatch() {
     setState(() {
@@ -23,8 +28,40 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  Future<void> registerUser() async {
+    try {
+      final apiURL = 'http://10.0.2.2:8000/auth/register'; // Replace with your registration endpoint
+      final response = await http.post(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, String>{
+          'username': _usernameController.text,
+          'password': _passwordController.text,
+          // Add more fields as needed for registration
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200 || response.statusCode == 202)  {
+        print('Registration successful');
+        // Navigate to your login page upon successful registration
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => Login(), // Navigate to YourLoginPageWidget
+          ),
+        );
+      } else {
+        print('Failed to register user');
+        // Handle error scenario
+      }
+    } catch (e) {
+      print('ERROR: $e');
+      // Handle error scenario
+    }
+  }
+
   @override
   void dispose() {
+    _usernameController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -75,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () {
-                        // Handle back action
+                         Navigator.of(context).pop();
                       },
                     ),
                   ),
@@ -151,6 +188,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               const SizedBox(height: 10),
                               TextFormField(
+                                controller: _usernameController,
                                 decoration: InputDecoration(
                                   hintText: 'Enter your username',
                                   filled: true,
@@ -258,7 +296,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   onPressed: () {
                                     _checkPasswordMatch();
                                     if (_isPasswordMatching) {
-                                      // Handle sign-up action
+                                      registerUser(); // Call registerUser function on button press
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
