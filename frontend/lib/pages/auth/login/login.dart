@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/mainScreen.dart';
 import 'package:frontend/pages/auth/signup/signup.dart';
 import 'package:frontend/pages/home/home.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,6 +18,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
+  String errorMessage = '';
 
   double textFieldHeight = 50.0;
 
@@ -23,59 +28,79 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-
-    if (username.isEmpty || password.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Empty Fields"),
-            content: const Text("Please fill in all fields to proceed with login."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-      return;
+  String parseToken(String responseBody) {
+    try {
+      var jsonResponse = jsonDecode(responseBody);
+      if (jsonResponse['token'] != null) {
+        return jsonResponse['token'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return '';
     }
+  }
 
-    // Simulate login logic (replace with your actual login code)
-    bool loginSuccess = true; // Example: assume login succeeds for demonstration
-
-    if (loginSuccess) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Login Failed"),
-            content: const Text("Invalid username or password. Please try again."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                },
-                child: const Text("OK"),
-              ),
-            ],
+  void login() async {
+    try {
+      final apiURL = 'http://10.0.2.2:8000/auth/login';
+      if (_usernameController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty) {
+        var response = await http.post(Uri.parse(apiURL),
+            headers: <String, String>{'Content-Type': 'application/json'},
+            body: jsonEncode(<String, dynamic>{
+              "username": _usernameController.text,
+              "password": _passwordController.text,
+            }));
+        if (response.statusCode == 200) {
+          print('Login successfully');
+          final mytoken = parseToken(response.body);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString("token",mytoken);
+          print(prefs.getString("token"));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MainScreen(
+                    )),
           );
-        },
-      );
+        } else {
+          setState(() {
+            errorMessage = 'Incorrect username or password';
+          });
+          print('Failed to login: ${response.body}');
+          showErrorDialog('Login Failed', 'Incorrect username or password');
+        }
+      } else {
+        showErrorDialog('Empty Fields', 'Please fill in all fields to proceed with login.');
+      }
+    } catch (e) {
+      print('ERROR: $e');
+      print(_usernameController.text);
+      print(_passwordController.text);
+      showErrorDialog('Login Error', 'An error occurred during login. Please try again.');
     }
+  }
+
+  void showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _navigateToSignupPage(BuildContext context) {
