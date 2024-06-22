@@ -3,9 +3,11 @@ import 'package:flutter/widgets.dart';
 
 class MyAppBar extends StatelessWidget {
   final String Topic;
+  final VoidCallback onBackButtonPressed;
   MyAppBar({
     super.key,
     required this.Topic,
+    required this.onBackButtonPressed,
   });
 
   @override
@@ -60,7 +62,7 @@ class MyAppBar extends StatelessWidget {
           top: 60,
           left: 20,
           child: GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: onBackButtonPressed,
             child: Icon(Icons.arrow_back, color: Colors.white, size: 30),
           ),
         ),

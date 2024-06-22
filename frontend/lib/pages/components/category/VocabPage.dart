@@ -39,6 +39,9 @@ class _VocabState extends State<Vocab> {
           children: [
             MyAppBar(
               Topic: widget.categoryName,
+              onBackButtonPressed: () {
+                Navigator.pop(context);
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(37.0),

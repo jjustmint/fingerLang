@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home/VocabList.dart';
+import 'package:frontend/pages/lesson/LessonList.dart';
 
-class categoryCard extends StatelessWidget {
-  String CategoryName;
-  String CategoryImage;
+class LessonCard extends StatelessWidget {
+  String LessonName;
+  String LessonImage;
+  String Level;
   int id;
-  categoryCard({
+  VoidCallback onBackButtonPressed;
+  LessonCard({
     super.key,
-    required this.CategoryName,
-    required this.CategoryImage,
+    required this.LessonName,
+    required this.LessonImage,
+    required this.Level,
     required this.id,
+    required this.onBackButtonPressed,
   });
 
   @override
@@ -19,15 +23,18 @@ class categoryCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => InfoCategory(
-                    categoryName: CategoryName,
-                    id: id,
+              builder: (context) => LessonList(
+                  LessonName: LessonName,
+                  LessonImage: LessonImage,
+                  Level: Level,
+                  id: id,
+                  onBackButtonPressed: onBackButtonPressed
                   )),
         );
       },
       child: Container(
         //category card
-        height: 97,
+        height: 120,
         width: 358,
         decoration: BoxDecoration(
           color: Color(0xFFFFF5D5),
@@ -44,18 +51,26 @@ class categoryCard extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 21, bottom: 30),
-              child: Text(CategoryName,
+              padding: const EdgeInsets.only(top: 24, left: 21, bottom: 30),
+              child: Text(LessonName,
                   style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFFA86944))),
             ),
             Padding(
+              padding: const EdgeInsets.only(top: 60, left: 21, bottom: 30),
+              child: Text(Level,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFFA86944))),
+            ),
+            Padding(
               padding: const EdgeInsets.only(
-                  top: 9, left: 256, right: 20, bottom: 8),
+                  top: 20, left: 270, right: 20, bottom: 8),
               child: Image.network(
-                CategoryImage,
+                LessonImage,
                 width: 80,
                 height: 80,
               ),

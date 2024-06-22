@@ -56,6 +56,7 @@ model Lessons {
   id           Int            @id @default(autoincrement())
   lessons_name String         @db.VarChar(50)
   lesson_url   String         @db.Text
+  level        String         @db.VarChar(50)
   Lesson_lists Lesson_lists[]
 }
 

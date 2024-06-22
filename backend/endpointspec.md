@@ -6,3 +6,9 @@
 - auth
   - Login - POST `/auth/login`
   - Register - POST `/auth/register`
+- profile
+  - get profile - GET `/profile/getprofile/:token`
+  - get favorite - get `/profile/getfavorite/:token`
+- lesson
+  - get all lesson - GET `/lesson/getlesson`
+  - get lesson list - GET `/lesson/getlessonlist/:lessonId`
