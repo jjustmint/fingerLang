@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/auth/login/login.dart';
+import 'package:frontend/pages/auth/prelogin/prelogin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTopBar extends StatelessWidget {
@@ -23,7 +24,7 @@ class ProfileTopBar extends StatelessWidget {
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setString("token", "");
-                Navigator.push(context,MaterialPageRoute(builder: (context) => Login()));
+                Navigator.push(context,MaterialPageRoute(builder: (context) => Prelogin()));
               },
               child: Text('Confirm'),
             ),
