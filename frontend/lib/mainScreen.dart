@@ -23,9 +23,9 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _checkOnboardingStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool staylogin = prefs.getBool('login') ?? true;
+    String token = prefs.getString('token') ?? "";
 
-    if (staylogin) {
+    if (token.isNotEmpty) {
       setState(() {
         _isLogin = true;
       });
