@@ -13,20 +13,23 @@ import 'package:http/http.dart' as http;
 
 class VocabList {
   final int id;
-  final int vocab_id;
-  final int lesson_id;
+  final String name;
+  final String gif;
+  final String desc;
 
   VocabList({
     required this.id,
-    required this.vocab_id,
-    required this.lesson_id,
+    required this.name,
+    required this.gif,
+    required this.desc,
   });
 
   factory VocabList.fromJson(Map<String, dynamic> json) {
     return VocabList(
       id: json['id'],
-      vocab_id: json['post_id'],
-      lesson_id: json['lesson_id'],
+      name: json['name'],
+      gif: json['image_url'],
+      desc: json['desc'],
     );
   }
 }
@@ -78,7 +81,6 @@ class _LessonListState extends State<LessonList> {
       if (response.statusCode == 200) {
         setState(() {
           vocabList = parseVocabList(response.body);
-          // vocabIdList = vocabList.map((vocab) => vocab.vocab_id).toList();
         });
         print('vocabList: $vocabList');
       } else {
@@ -89,34 +91,11 @@ class _LessonListState extends State<LessonList> {
     }
   }
 
-  void getVocabWord(int id) async {
-    try {
-      final apiURL = ("http://10.0.2.2:8000/handpose/getbyid/$id");
-      final response = await http.get(
-        Uri.parse(apiURL),
-        headers: <String, String>{'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          vocabList = parseVocabList(response.body);
-        });
-        print('vocabList: $vocabList');
-      } else {
-        print('Failed to load vocabList data');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  List<VocabList> parseVocabList(String body) {
-    try {
-      List<dynamic> jsonData = jsonDecode(body);
-      return jsonData.map((json) => VocabList.fromJson(json)).toList();
-    } catch (e) {
-      throw Exception(e);
-    }
+  List<VocabList> parseVocabList(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<VocabList>((json) {
+      return VocabList.fromJson(json['Hand_posts']);
+    }).toList();
   }
 
   @override
@@ -156,7 +135,7 @@ class _LessonListState extends State<LessonList> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         List<int> postIds =
-                            vocabList.map((vocab) => vocab.vocab_id).toList();
+                            vocabList.map((vocab) => vocab.id).toList();
                         return Stack(
                           children: [
                             Padding(
@@ -172,10 +151,12 @@ class _LessonListState extends State<LessonList> {
                               ),
                             ),
                             lessonVocabCard(
-                              id: vocabList[index].vocab_id,
-                              vocabulary: vocabList[index].vocab_id.toString(),
+                              id: vocabList[index].id,
+                              vocabulary: vocabList[index].name,
                               lessonName: widget.LessonName,
                               vocabIdList: postIds,
+                              gif: vocabList[index].gif,
+                              desc: vocabList[index].desc,
                             ),
                           ],
                         );
@@ -193,12 +174,16 @@ class lessonVocabCard extends StatelessWidget {
   String lessonName;
   String vocabulary;
   List<int> vocabIdList = [];
+  String gif;
+  String desc;
   lessonVocabCard({
     super.key,
     required this.id,
     required this.vocabulary,
     required this.lessonName,
     required this.vocabIdList,
+    required this.gif,
+    required this.desc,
   });
 
   @override
@@ -211,10 +196,9 @@ class lessonVocabCard extends StatelessWidget {
                 builder: (context) => LessonVocabInfo(
                       id: id,
                       vocabName: vocabulary,
-                      gif:
-                          "https://images.pexels.com/photos/3680219/pexels-photo-3680219.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                      gif: gif,
                       categoryName: lessonName,
-                      description: "test",
+                      description: desc,
                       vocabIdList: vocabIdList,
                     )));
       },
