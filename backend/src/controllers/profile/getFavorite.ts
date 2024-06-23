@@ -26,7 +26,7 @@ const getFavorite = async (req: Request, res: Response) => {
   });
   const formattedData = {
     username: data?.username,
-    favorite: data?.Favorite.map((favorite) => {
+    Favorite: data?.Favorite.map((favorite) => {
       return {
         post_id: favorite.post_id,
         name: favorite.Hand_posts.name,
