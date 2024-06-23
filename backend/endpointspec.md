@@ -8,7 +8,12 @@
   - Register - POST `/auth/register`
 - profile
   - get profile - GET `/profile/getprofile/:token`
-  - get favorite - get `/profile/getfavorite/:token`
+  - get favorite - GET `/profile/getfavorite/:token`
+  - post favorite - POST `profile/addfavorite`
+  - delete favorite - delete `/profile/deletefavorite`
+  - post trophy - POST `/profile/addtrophy`
+  - post updateProfileImage - POST `/profile/updateProfileImage`
+  
 - lesson
   - get all lesson - GET `/lesson/getlesson`
   - get lesson list - GET `/lesson/getlessonlist/:lessonId`
