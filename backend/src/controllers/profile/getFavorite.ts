@@ -15,15 +15,25 @@ const getFavorite = async (req: Request, res: Response) => {
       Favorite: {
         select: {
           post_id: true,
+          Hand_posts: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
   });
-  //   const response = {
-  //     username: data?.username,
-  //     Trophies: data?.User_trophies.map((user_trophy) => user_trophy.Trophies),
-  //   };
-  return res.json(data);
+  const formattedData = {
+    username: data?.username,
+    favorite: data?.Favorite.map((favorite) => {
+      return {
+        post_id: favorite.post_id,
+        name: favorite.Hand_posts.name,
+      };
+    }),
+  };
+  return res.json(formattedData);
 };
 
 export { getFavorite };
