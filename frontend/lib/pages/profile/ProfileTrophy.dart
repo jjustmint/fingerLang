@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileTrophy extends StatefulWidget {
   const ProfileTrophy({super.key});
@@ -8,12 +12,43 @@ class ProfileTrophy extends StatefulWidget {
 }
 
 class _ProfileTrophyState extends State<ProfileTrophy> {
+  List<dynamic> Trophies = [];
+  @override
+  void initState() {
+    getTrophy();
+    super.initState();
+  }
+
+  void getTrophy() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/profile/getprofile/$token';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      setState(() {
+        Trophies = jsonDecode(response.body)['Trophies'];
+      });
+      print('Trophies: $Trophies');
+      print(Trophies.length);
+    } catch (e) {
+      print('Error getting user profile: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
       child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(), // Disable GridView scrolling
+        physics:
+            const NeverScrollableScrollPhysics(), // Disable GridView scrolling
         shrinkWrap: true, // Use available height
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Number of columns
@@ -21,9 +56,12 @@ class _ProfileTrophyState extends State<ProfileTrophy> {
           crossAxisSpacing: 10, // Spacing between columns
           mainAxisSpacing: 10, // Spacing between rows
         ),
-        itemCount: 10, // Number of items
+        itemCount: Trophies.length, // Number of items
         itemBuilder: (context, index) {
-          return TrophyCard();
+          return TrophyCard(
+            trophyName: Trophies[index]['trophy_name'],
+            trophyUrl: Trophies[index]['trophy_url'],
+          );
         },
       ),
     );
@@ -31,6 +69,14 @@ class _ProfileTrophyState extends State<ProfileTrophy> {
 }
 
 class TrophyCard extends StatelessWidget {
+  final String trophyName;
+  final String trophyUrl;
+
+  TrophyCard({
+    required this.trophyName,
+    required this.trophyUrl,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -45,15 +91,15 @@ class TrophyCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Image.asset(
-                'assets/images/Trophy.png', // Replace with your image path
+              child: Image.network(
+                trophyUrl, // Use trophyUrl from the parameters
                 height: 70,
                 width: 70,
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              'Trophy name',
+            Text(
+              trophyName, // Use trophyName from the parameters
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,

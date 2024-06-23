@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/profile/FavoritePage.dart';
 
-
 class StatusBox extends StatelessWidget {
   final int successCount;
-  final int continueCount;
   final int favoriteCount;
   final VoidCallback? onTapFavorite;
 
   StatusBox({
     required this.successCount,
-    required this.continueCount,
     required this.favoriteCount,
     this.onTapFavorite,
   });
@@ -37,8 +34,6 @@ class StatusBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildSection("Success", successCount),
-          _buildVerticalDivider(),
-          _buildSection("Continue", continueCount),
           _buildVerticalDivider(),
           GestureDetector(
             onTap: () {

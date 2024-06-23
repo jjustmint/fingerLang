@@ -36,7 +36,7 @@ class Myvocab {
       id: json['id'] ?? 0,
       image: json['image_url'] ?? '',
       name: json['name'] ?? '',
-      post: json['post'] ?? '',
+      post: json['post_url'] ?? '',
       desc: json['desc'] ?? '',
     );
   }
@@ -132,8 +132,9 @@ class NormalList extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => Vocab(
                       categoryName: categoryName,
+                      id: vocabs[index].id,
                       vocabName: vocabs[index].name,
-                      gif: vocabs[index].image,
+                      gif: vocabs[index].post,
                       description: vocabs[index].desc,
                     ),
                   ),
@@ -179,8 +180,9 @@ class AlphabetList extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => Vocab(
                       categoryName: categoryName,
+                      id: vocabs[index].id,
                       vocabName: vocabs[index].name,
-                      gif: vocabs[index].image,
+                      gif: vocabs[index].post,
                       description: vocabs[index].desc,
                     ),
                   ),
