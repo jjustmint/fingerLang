@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/components/MyAppBar.dart';
+import 'package:frontend/pages/lesson/TrophyPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -184,6 +185,32 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
     }
   }
 
+  void createTrophy() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token')!;
+      final apiUrl = 'http://10.0.2.2:8000/profile/addtrophy';
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'token': token,
+          'trophyId': widget.id,
+        }),
+      );
+      if (response.statusCode == 200) {
+        // Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(builder: (context) => MyTrophy()));
+        print('Trophy added');
+      } else {
+        print('Failed to add trophy: ${response.statusCode}');
+        print(widget.id);
+      }
+    } catch (e) {
+      print('ERROR: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Icon icon = Icon(
@@ -327,6 +354,26 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                             ),
                             child: Text(
                               'Next',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: Color(
+                                    0xFFFFFCD2), // Set the text color here
+                              ),
+                            ),
+                          ),
+                        if (currentIndex == widget.vocabIdList.length - 1)
+                          ElevatedButton(
+                            onPressed: () {
+                              createTrophy();
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFA86944)),
+                            ),
+                            child: Text(
+                              'Finish',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
