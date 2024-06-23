@@ -56,6 +56,7 @@ class _VocabState extends State<Vocab> {
         setState(() {
           isFavorite = found;
         });
+        print('Favorites loaded: $favorites');
       } else {
         print('Failed to load favorites: ${response.statusCode}');
       }

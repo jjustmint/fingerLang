@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -20,12 +20,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    getTrophy();
-    getFavorite();
     super.initState();
+    loadData();
   }
 
-  void getTrophy() async {
+  void loadData() async {
+    await getTrophy();
+    await getFavorite();
+  }
+
+  Future<void> getTrophy() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
@@ -38,16 +42,20 @@ class _ProfilePageState extends State<ProfilePage> {
         Uri.parse(apiURL),
         headers: <String, String>{'Content-Type': 'application/json'},
       );
-      setState(() {
-        Trophies = jsonDecode(response.body)['Trophies'];
-      });
-      print('Trophies: $Trophies');
+      if (response.statusCode == 200) {
+        setState(() {
+          Trophies = jsonDecode(response.body)['Trophies'];
+        });
+        print('Trophies: $Trophies');
+      } else {
+        print('Failed to load Trophies data');
+      }
     } catch (e) {
       print('Error getting user profile: $e');
     }
   }
 
-  void getFavorite() async {
+  Future<void> getFavorite() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
@@ -60,10 +68,14 @@ class _ProfilePageState extends State<ProfilePage> {
         Uri.parse(apiURL),
         headers: <String, String>{'Content-Type': 'application/json'},
       );
-      setState(() {
-        Favorites = jsonDecode(response.body)['Favorite'];
-      });
-      print('Favorite: $Favorites');
+      if (response.statusCode == 200) {
+        setState(() {
+          Favorites = jsonDecode(response.body)['Favorite'];
+        });
+        print('Favorites: $Favorites');
+      } else {
+        print('Failed to load Favorites data');
+      }
     } catch (e) {
       print('Error getting favorite profile: $e');
     }
@@ -75,19 +87,18 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: const Color(0xFFFFFCD2),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // Align children to the start
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProfileAppBar(),
             Center(
               child: StatusBox(
-                  successCount: Trophies.length,
-                  favoriteCount: Favorites.length),
+                successCount: Trophies.length,
+                favoriteCount: Favorites.length,
+              ),
             ),
             const SizedBox(height: 20),
             Container(
-              margin: const EdgeInsets.only(
-                  left: 30.0), // Adjust the left margin as needed
+              margin: const EdgeInsets.only(left: 30.0),
               child: const Text(
                 'Trophies',
                 style: TextStyle(
