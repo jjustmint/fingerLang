@@ -1,25 +1,56 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileAvatar extends StatefulWidget {
   @override
   _ProfileAvatarState createState() => _ProfileAvatarState();
 }
 
-
 class _ProfileAvatarState extends State<ProfileAvatar> {
-  // List of predefined images
   final List<String> _images = [
-    'assets/images/Male1.png',
-    'assets/images/Male2.png',
-    'assets/images/Male3.png',
-    'assets/images/Female1.png',
-    'assets/images/Female2.png',
-    'assets/images/Female3.png',
+    'Male1.png',
+    'Male2.png',
+    'Male3.png',
+    'Female1.png',
+    'Female2.png',
+    'Female3.png',
   ];
 
-  // Index of the current selected image
   int _selectedIndex = 0;
+
+  void _updateUserProfile(String imageUrl) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/profile/updateProfileImage';
+      final response = await http.post(Uri.parse(apiURL),
+          headers: <String, String>{'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            "token": token,
+            "imageUrl": imageUrl,
+          }));
+
+      if (response.statusCode == 200) {
+        print('User profile updated successfully');
+        Navigator.of(context).pop();
+      } else {
+        print(
+            'Failed to update user profile. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        print(imageUrl);
+        print(token!);
+      }
+    } catch (e) {
+      print('Error updating user profile: $e');
+    }
+  }
 
   void _openImageSelectionDialog() {
     showDialog(
@@ -33,7 +64,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
           title: Text('Select a Profile Picture'),
           content: Container(
             width: double.maxFinite,
-            height: 300, // Increased the height to provide more space
+            height: 300,
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Column(
@@ -52,8 +83,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                             },
                             itemBuilder: (context, index) {
                               return Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 30), // Increased margin for more space
+                                margin: EdgeInsets.symmetric(horizontal: 30),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: _tempSelectedIndex == index
@@ -64,16 +94,15 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: CircleAvatar(
-                                  radius:
-                                      40, // Adjusted the radius for smaller profile pictures
-                                  backgroundImage:
-                                      AssetImage(_images[index]),
+                                  radius: 40,
+                                  backgroundImage: AssetImage(
+                                      'assets/images/${_images[index]}'),
                                 ),
                               );
                             },
                           ),
                           Positioned(
-                            left: -25, // Adjusted position for more space
+                            left: -25,
                             child: Visibility(
                               visible: _tempSelectedIndex > 0,
                               child: IconButton(
@@ -88,7 +117,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                             ),
                           ),
                           Positioned(
-                            right: -25, // Adjusted position for more space
+                            right: -25,
                             child: Visibility(
                               visible: _tempSelectedIndex < _images.length - 1,
                               child: IconButton(
@@ -116,9 +145,8 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                 setState(() {
                   _selectedIndex = _tempSelectedIndex;
                 });
-                Navigator.of(context).pop();
                 String selectedImageUrl = _images[_selectedIndex];
-                //_updateUserProfile(selectedImageUrl);
+                _updateUserProfile(selectedImageUrl);
               },
               child: Text('Confirm'),
             ),
@@ -142,8 +170,9 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 100, // Increased radius for the profile picture
-              backgroundImage: AssetImage(_images[_selectedIndex]),
+              radius: 100,
+              backgroundImage:
+                  AssetImage('assets/images/${_images[_selectedIndex]}'),
             ),
             Positioned(
               right: 15,
@@ -163,9 +192,9 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
                     ],
                   ),
                   child: CircleAvatar(
-                    radius: 20, // Increased radius for the edit icon
+                    radius: 20,
                     backgroundColor: Color(0xFFCC8459),
-                    child: Icon(Icons.edit, size: 25, color: Color(0xFFFFFCD2)), // Increased icon size
+                    child: Icon(Icons.edit, size: 25, color: Color(0xFFFFFCD2)),
                   ),
                 ),
               ),
