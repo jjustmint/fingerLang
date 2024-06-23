@@ -9,9 +9,9 @@
 - profile
   - get profile - GET `/profile/getprofile/:token`
   - get favorite - GET `/profile/getfavorite/:token`
-  - post favorite - POST `profile/addfavorite`
-  - delete favorite - delete `/profile/deletefavorite`
-  - post trophy - POST `/profile/addtrophy`
+  - post favorite - POST `profile/addfavorite` token postId
+  - delete favorite - delete `/profile/deletefavorite` token postId
+  - post trophy - POST `/profile/addtrophy` token trophyId
   - post updateProfileImage - POST `/profile/updateProfileImage`
   
 - lesson

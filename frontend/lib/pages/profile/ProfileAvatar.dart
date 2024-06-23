@@ -18,8 +18,14 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
     'Female2.png',
     'Female3.png',
   ];
-
+  String profile = '';
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    getImage();
+    super.initState();
+  }
 
   void _updateUserProfile(String imageUrl) async {
     try {
@@ -39,6 +45,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
       if (response.statusCode == 200) {
         print('User profile updated successfully');
+        getImage();
         Navigator.of(context).pop();
       } else {
         print(
@@ -49,6 +56,27 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
       }
     } catch (e) {
       print('Error updating user profile: $e');
+    }
+  }
+
+  void getImage() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/profile/getprofile/$token';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      setState(() {
+        profile = jsonDecode(response.body)['image_url'];
+      });
+    } catch (e) {
+      print('Error getting user profile: $e');
     }
   }
 
@@ -171,8 +199,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
           children: [
             CircleAvatar(
               radius: 100,
-              backgroundImage:
-                  AssetImage('assets/images/${_images[_selectedIndex]}'),
+              backgroundImage: AssetImage('assets/images/$profile'),
             ),
             Positioned(
               right: 15,

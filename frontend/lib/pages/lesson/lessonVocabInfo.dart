@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/components/MyAppBar.dart';
+import 'package:frontend/pages/lesson/TrophyPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LessonVocabInfo extends StatefulWidget {
   final int id;
@@ -53,6 +55,7 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
 
   @override
   void initState() {
+    checkFavorite();
     super.initState();
     currentIndex = widget.vocabIdList.indexOf(widget.id);
     currentVocab = getCurrentlyVocab();
@@ -104,6 +107,107 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
       return NextOrPreviousVocab.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load vocab data');
+    }
+  }
+
+  Future<void> checkFavorite() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token')!;
+      final apiUrl = 'http://10.0.2.2:8000/profile/getfavorite/$token';
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final parsedResponse = jsonDecode(response.body);
+        List<dynamic> favorites = parsedResponse['Favorite'];
+
+        // Check if widget.id is in the list of favorites
+        bool found =
+            favorites.any((favorite) => favorite['post_id'] == widget.id);
+
+        setState(() {
+          isFavorite = found;
+        });
+      } else {
+        print('Failed to load favorites: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('ERROR: $e');
+    }
+  }
+
+  void createFavorite() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token')!;
+      final apiUrl = 'http://10.0.2.2:8000/profile/addfavorite';
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'token': token,
+          'postId': widget.id,
+        }),
+      );
+      if (response.statusCode == 200) {
+        print('Favorite added');
+      } else {
+        print('Failed to add favorite: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('ERROR: $e');
+    }
+  }
+
+  void deleteFavorite() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token')!;
+      final apiUrl = 'http://10.0.2.2:8000/profile/deletefavorite';
+      final response = await http.delete(
+        Uri.parse(apiUrl),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'token': token,
+          'postId': widget.id,
+        }),
+      );
+      if (response.statusCode == 200) {
+        print('Favorite deleted');
+      } else {
+        print('Failed to delete favorite: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('ERROR: $e');
+    }
+  }
+
+  void createTrophy() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token')!;
+      final apiUrl = 'http://10.0.2.2:8000/profile/addtrophy';
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'token': token,
+          'trophyId': widget.id,
+        }),
+      );
+      if (response.statusCode == 200) {
+        // Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(builder: (context) => MyTrophy()));
+        print('Trophy added');
+      } else {
+        print('Failed to add trophy: ${response.statusCode}');
+        print(widget.id);
+      }
+    } catch (e) {
+      print('ERROR: $e');
     }
   }
 
@@ -181,7 +285,17 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                               child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    isFavorite = !isFavorite;
+                                    if (isFavorite == false) {
+                                      createFavorite();
+                                      setState(() {
+                                        isFavorite = !isFavorite;
+                                      });
+                                    } else if (isFavorite == true) {
+                                      deleteFavorite();
+                                      setState(() {
+                                        isFavorite = !isFavorite;
+                                      });
+                                    }
                                   });
                                 },
                                 icon: icon,
@@ -240,6 +354,26 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                             ),
                             child: Text(
                               'Next',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: Color(
+                                    0xFFFFFCD2), // Set the text color here
+                              ),
+                            ),
+                          ),
+                        if (currentIndex == widget.vocabIdList.length - 1)
+                          ElevatedButton(
+                            onPressed: () {
+                              createTrophy();
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFA86944)),
+                            ),
+                            child: Text(
+                              'Finish',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
