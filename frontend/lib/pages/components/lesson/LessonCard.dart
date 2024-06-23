@@ -28,8 +28,7 @@ class LessonCard extends StatelessWidget {
                   LessonImage: LessonImage,
                   Level: Level,
                   id: id,
-                  onBackButtonPressed: onBackButtonPressed
-                  )),
+                  onBackButtonPressed: onBackButtonPressed)),
         );
       },
       child: Container(
@@ -52,7 +51,7 @@ class LessonCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 24, left: 21, bottom: 30),
-              child: Text(LessonName,
+              child: Text(id.toString() + ". " + LessonName,
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,

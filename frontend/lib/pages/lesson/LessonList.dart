@@ -55,6 +55,7 @@ class LessonList extends StatefulWidget {
 class _LessonListState extends State<LessonList> {
   List<VocabList> vocabList = [];
   List<int> vocabIdList = [];
+  int lessonId = 0;
   @override
   void initState() {
     getLessonVocab();
@@ -81,8 +82,10 @@ class _LessonListState extends State<LessonList> {
       if (response.statusCode == 200) {
         setState(() {
           vocabList = parseVocabList(response.body);
+          lessonId = jsonDecode(response.body)[0]['lesson_id'];
         });
         print('vocabList: $vocabList');
+        print('lessonId: $lessonId');
       } else {
         print('Failed to load vocabList data');
       }
@@ -151,6 +154,7 @@ class _LessonListState extends State<LessonList> {
                               ),
                             ),
                             lessonVocabCard(
+                              lessonId: lessonId,
                               id: vocabList[index].id,
                               vocabulary: vocabList[index].name,
                               lessonName: widget.LessonName,
@@ -170,6 +174,7 @@ class _LessonListState extends State<LessonList> {
 }
 
 class lessonVocabCard extends StatelessWidget {
+  int lessonId;
   int id;
   String lessonName;
   String vocabulary;
@@ -178,6 +183,7 @@ class lessonVocabCard extends StatelessWidget {
   String desc;
   lessonVocabCard({
     super.key,
+    required this.lessonId,
     required this.id,
     required this.vocabulary,
     required this.lessonName,
@@ -194,6 +200,7 @@ class lessonVocabCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => LessonVocabInfo(
+                      lessonId: lessonId,
                       id: id,
                       vocabName: vocabulary,
                       gif: gif,
