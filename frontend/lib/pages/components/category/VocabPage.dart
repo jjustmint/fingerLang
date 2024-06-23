@@ -53,7 +53,7 @@ class _VocabState extends State<Vocab> {
             ),
             Container(
               width: 345,
-              height: 345,
+              height: 420,
               decoration: BoxDecoration(
                 color: Color(0xFFFFF5D5),
                 borderRadius: BorderRadius.circular(20),
@@ -97,11 +97,11 @@ class _VocabState extends State<Vocab> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Text(
                       widget.description,
                       style: const TextStyle(
-                        fontSize: 22,
+                        fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFFA86944),
                       ),
