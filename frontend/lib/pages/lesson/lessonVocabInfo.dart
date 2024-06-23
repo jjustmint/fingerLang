@@ -145,7 +145,7 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                   ),
                   Container(
                     width: 345,
-                    height: 225,
+                    height: 360,
                     decoration: BoxDecoration(
                       color: Color(0xFFFFF5D5),
                       borderRadius: BorderRadius.circular(20),
@@ -190,11 +190,11 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30),
+                          padding: const EdgeInsets.only(left: 30, right: 30),
                           child: Text(
                             vocab.desc,
                             style: const TextStyle(
-                              fontSize: 22,
+                              fontSize: 16,
                               fontWeight: FontWeight.w800,
                               color: Color(0xFFA86944),
                             ),
