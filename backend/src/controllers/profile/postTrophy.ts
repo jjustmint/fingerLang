@@ -8,6 +8,17 @@ const addTrophy = async (req: Request, res: Response) => {
   const { id } = VerifyToken(token);
 
   try {
+    const existingUserTrophy = await prisma.user_trophies.findFirst({
+      where: {
+        user_id: id,
+        trophy_id: trophyId,
+      },
+    });
+
+    if (existingUserTrophy) {
+      return res.status(400).json({ error: "User already has this trophy" });
+    }
+
     await prisma.user_trophies.create({
       data: {
         user_id: id,
