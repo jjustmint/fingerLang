@@ -1,9 +1,48 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class FavoritePage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class FavoritePage extends StatefulWidget {
+  @override
+  State<FavoritePage> createState() => _FavoritePageState();
+}
+
+class _FavoritePageState extends State<FavoritePage> {
+  List<dynamic> Favorites = [];
+  @override
+  void initState() {
+    getFavorite();
+    super.initState();
+  }
+
+  void getFavorite() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/profile/getfavorite/$token';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      setState(() {
+        Favorites = jsonDecode(response.body)['Favorite'];
+      });
+      print('Favorite: $Favorites');
+    } catch (e) {
+      print('Error getting favorite profile: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFFFFCD2),
         body: SingleChildScrollView(
@@ -54,15 +93,16 @@ class FavoritePage extends StatelessWidget {
                       left: 10, // Adjusted left position
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pop(context, '/frontend/lib/pages/profile/profile.dart');
+                          Navigator.pop(context,
+                              '/frontend/lib/pages/profile/profile.dart');
                         },
-                          child: Icon(
-                            Icons.arrow_back,
-                            size: 30,
-                            color: Colors.white,
-                          ),
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 30,
+                          color: Colors.white,
                         ),
                       ),
+                    ),
                     // Title
                     Positioned(
                       top: 100,
@@ -91,7 +131,9 @@ class FavoritePage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 180.0, left: 30.0, right: 30.0),
-                child: FavoriteList(),
+                child: FavoriteList(
+                  Favorites: Favorites,
+                ),
               ),
             ],
           ),
@@ -102,13 +144,41 @@ class FavoritePage extends StatelessWidget {
 }
 
 class FavoriteList extends StatefulWidget {
-  const FavoriteList({Key? key}) : super(key: key);
+  List<dynamic> Favorites = [];
+  FavoriteList({Key? key, required this.Favorites}) : super(key: key);
 
   @override
   State<FavoriteList> createState() => _FavoriteListState();
 }
 
 class _FavoriteListState extends State<FavoriteList> {
+  @override
+  void initState() {
+    getVocab();
+    super.initState();
+  }
+
+  void getVocab() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/profile/getfavorite/$token';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      setState(() {
+        // Add code to get vocab list
+      });
+    } catch (e) {
+      print('Error getting vocab list: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -120,15 +190,24 @@ class _FavoriteListState extends State<FavoriteList> {
         crossAxisSpacing: 10,
         mainAxisSpacing: 20,
       ),
-      itemCount: 20,
+      itemCount: widget.Favorites.length,
       itemBuilder: (context, index) {
-        return FavoriteCard();
+        return FavoriteCard(
+          name: widget.Favorites[index]['name'],
+        );
       },
     );
   }
 }
 
-class FavoriteCard extends StatelessWidget {
+class FavoriteCard extends StatefulWidget {
+  final String name;
+  FavoriteCard({Key? key, required this.name}) : super(key: key);
+  @override
+  State<FavoriteCard> createState() => _FavoriteCardState();
+}
+
+class _FavoriteCardState extends State<FavoriteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -149,7 +228,7 @@ class FavoriteCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Favorite card',
+              widget.name,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,

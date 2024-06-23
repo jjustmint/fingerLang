@@ -42,7 +42,7 @@ class HomeTextBox extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(right: 50.0),
                     child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                      'Explore, learn, and conquer! Let\'s embark on a journey to master new words and concepts.',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,

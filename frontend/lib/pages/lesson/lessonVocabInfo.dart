@@ -207,7 +207,7 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
         print('Trophy added');
       } else {
         print('Failed to add trophy: ${response.statusCode}');
-        print(widget.id);
+        Navigator.pop(context);
       }
     } catch (e) {
       print('ERROR: $e');
