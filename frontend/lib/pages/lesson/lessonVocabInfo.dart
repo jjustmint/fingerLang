@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LessonVocabInfo extends StatefulWidget {
   final int id;
+  final int lessonId;
   final String categoryName;
   final String vocabName;
   final String gif;
@@ -16,6 +17,7 @@ class LessonVocabInfo extends StatefulWidget {
 
   LessonVocabInfo({
     super.key,
+    required this.lessonId,
     required this.id,
     required this.categoryName,
     required this.vocabName,
@@ -70,6 +72,7 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
         context,
         MaterialPageRoute(
           builder: (context) => LessonVocabInfo(
+            lessonId: widget.lessonId,
             id: widget.vocabIdList[index],
             categoryName: widget.categoryName,
             vocabName: newVocab.name,
@@ -195,12 +198,12 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
         headers: <String, String>{'Content-Type': 'application/json'},
         body: jsonEncode(<String, dynamic>{
           'token': token,
-          'trophyId': widget.id,
+          'trophyId': widget.lessonId,
         }),
       );
       if (response.statusCode == 200) {
-        // Navigator.of(context).pushReplacement(
-        //     MaterialPageRoute(builder: (context) => MyTrophy()));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MyTrophy()));
         print('Trophy added');
       } else {
         print('Failed to add trophy: ${response.statusCode}');
@@ -366,7 +369,6 @@ class _LessonVocabInfoState extends State<LessonVocabInfo> {
                           ElevatedButton(
                             onPressed: () {
                               createTrophy();
-                              Navigator.pop(context);
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(

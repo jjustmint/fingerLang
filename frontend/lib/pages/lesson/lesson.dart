@@ -78,6 +78,7 @@ class _LessonPageState extends State<LessonPage> {
           lessons = parseLesson(response.body);
         });
         print('Categories: $lessons');
+        print('LessonId: ${lessons[1].id}');
       } else {
         print('Failed to load lesson data');
       }
