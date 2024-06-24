@@ -45,7 +45,7 @@ class _ProfileTrophyState extends State<ProfileTrophy> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
       child: GridView.builder(
         physics:
             const NeverScrollableScrollPhysics(), // Disable GridView scrolling

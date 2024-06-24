@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:frontend/pages/profile/FavoritePage.dart';
 
 class StatusBox extends StatelessWidget {
@@ -35,19 +36,7 @@ class StatusBox extends StatelessWidget {
         children: [
           _buildSection("Success", successCount),
           _buildVerticalDivider(),
-          GestureDetector(
-            onTap: () {
-              if (onTapFavorite != null) {
-                onTapFavorite!();
-              }
-              // Navigate to FavoritePage
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FavoritePage()),
-              );
-            },
-            child: _buildSection("Favorite", favoriteCount),
-          ),
+          _buildFavoriteSection(context),
         ],
       ),
     );
@@ -61,14 +50,21 @@ class StatusBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 2.0),
-          Text(
-            count.toString(),
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFA86944),
-            ),
-            textAlign: TextAlign.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (title == "Favorite")
+                Icon(Icons.favorite, color: Colors.red, size: 30.0),
+              Text(
+                count.toString(),
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFFA86944),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
           Text(
             title,
@@ -91,6 +87,26 @@ class StatusBox extends StatelessWidget {
         color: Colors.grey,
         thickness: 1.0,
       ),
+    );
+  }
+
+  Widget _buildFavoriteSection(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (onTapFavorite != null) {
+          onTapFavorite!();
+        }
+        // Navigate to FavoritePage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FavoritePage()),
+        );
+      },
+      child: Container(
+          width: 100,
+          height: 100,
+          color: Colors.white,
+          child: _buildSection("Favorite", favoriteCount)),
     );
   }
 }
