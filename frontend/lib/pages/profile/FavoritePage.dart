@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/components/category/VocabPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -153,33 +154,6 @@ class FavoriteList extends StatefulWidget {
 
 class _FavoriteListState extends State<FavoriteList> {
   @override
-  void initState() {
-    getVocab();
-    super.initState();
-  }
-
-  void getVocab() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('token');
-      if (token == null) {
-        print('Error: Token is null');
-        return;
-      }
-      final apiURL = 'http://10.0.2.2:8000/profile/getfavorite/$token';
-      final response = await http.get(
-        Uri.parse(apiURL),
-        headers: <String, String>{'Content-Type': 'application/json'},
-      );
-      setState(() {
-        // Add code to get vocab list
-      });
-    } catch (e) {
-      print('Error getting vocab list: $e');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -193,6 +167,7 @@ class _FavoriteListState extends State<FavoriteList> {
       itemCount: widget.Favorites.length,
       itemBuilder: (context, index) {
         return FavoriteCard(
+          id: widget.Favorites[index]['post_id'],
           name: widget.Favorites[index]['name'],
         );
       },
@@ -201,42 +176,92 @@ class _FavoriteListState extends State<FavoriteList> {
 }
 
 class FavoriteCard extends StatefulWidget {
+  final int id;
   final String name;
-  FavoriteCard({Key? key, required this.name}) : super(key: key);
+  FavoriteCard({
+    Key? key,
+    required this.name,
+    required this.id,
+  }) : super(key: key);
   @override
   State<FavoriteCard> createState() => _FavoriteCardState();
 }
 
 class _FavoriteCardState extends State<FavoriteCard> {
+  Map<String, dynamic> word = {};
+  @override
+  void initState() {
+    getVocab();
+    super.initState();
+  }
+
+  void getVocab() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        print('Error: Token is null');
+        return;
+      }
+      final apiURL = 'http://10.0.2.2:8000/handpose/getbyid/${widget.id}';
+      final response = await http.get(
+        Uri.parse(apiURL),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      setState(() {
+        word = jsonDecode(response.body);
+      });
+      print('Vocab: $word');
+    } catch (e) {
+      print('Error getting vocab list: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFFFFF5D5),
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 4,
-            color: Colors.black.withOpacity(0.3),
-            offset: Offset(2, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.name,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-              ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Vocab(
+              categoryName: 'Favorite',
+              id: widget.id,
+              vocabName: widget.name,
+              gif: word['post_url'] ?? '', // Handle null or undefined case
+              description: word['desc'] ?? '', // Handle null or undefined case
             ),
-            // Add more widgets if needed
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xFFFFF5D5),
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 4,
+              color: Colors.black.withOpacity(0.3),
+              offset: Offset(2, 2),
+            ),
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
+              ),
+              // Add more widgets if needed
+            ],
+          ),
         ),
       ),
     );
