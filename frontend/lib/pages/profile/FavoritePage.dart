@@ -254,9 +254,9 @@ class _FavoriteCardState extends State<FavoriteCard> {
               Text(
                 widget.name,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: Colors.black,
+                  color: Color(0xFFA86944),
                 ),
               ),
               // Add more widgets if needed
