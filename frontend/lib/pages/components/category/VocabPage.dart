@@ -133,6 +133,22 @@ class _VocabState extends State<Vocab> {
             Padding(
               padding: const EdgeInsets.all(37.0),
               child: Image(
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    width: 340,
+                    height: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    ),
+                  );
+                },
                 image: NetworkImage("${widget.gif}"),
                 width: 340,
                 height: 200,
