@@ -21,7 +21,7 @@ class MyTrophy extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  'Congratulations! \nYou have completed all the lessons!',
+                  'Congratulations! \nYou have completed all the words!',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -34,7 +34,7 @@ class MyTrophy extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Back to Home'),
+              child: Text('Back to Lesson'),
             ),
           ],
         ),
