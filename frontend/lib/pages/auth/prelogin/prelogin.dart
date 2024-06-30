@@ -98,7 +98,7 @@ class _PreloginState extends State<Prelogin> {
                     padding: EdgeInsets.symmetric(
                         horizontal: 0), // Space from left and right
                     child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s',
+                      'Welcome to Fingerlang – the app that empowers you to learn and master sign language with ease and confidence.',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class _PreloginState extends State<Prelogin> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20), // Margin between text and buttons
+                  const SizedBox(height: 40), // Margin between text and buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment
                         .spaceEvenly, // Change alignment to space buttons evenly
